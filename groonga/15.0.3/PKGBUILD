@@ -47,7 +47,7 @@ package_groonga-doc() {
 
 package_groonga() {
     pkgdesc="An opensource fulltext search engine."
-    depends=('glib2' 'libedit' 'zeromq' 'autoconf-archive' 'arrow'
+    depends=('glib2' 'libedit' 'zeromq' 'autoconf-archive' 'arrow' 'luajit'
         'libevent' 'mecab-ipadic' 'msgpack-c' 'ruby' 'libstemmer')
     optdepends=('cutter-test_framework' 'mercurial' 'kytea')
 
