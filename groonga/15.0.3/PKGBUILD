@@ -1,6 +1,6 @@
 # Maintainer: dkc <askdkc[at]gmail.com>
 
-pkgname=('groonga' 'groonga-doc')
+pkgname=('groonga')
 pkgver=15.0.3
 pkgbase=groonga
 pkgrel=1
@@ -15,50 +15,25 @@ makedepends=('glib2' 'libedit' 'zeromq' 'autoconf-archive' 'libstemmer'
 validpgpkeys=(2701F317CFCCCB975CADE9C2624CF77434839225)
 
 build() {
-    # TODO: Enable to build arrow on AArch64/armv7h
-    # TODO: grpc 1.28+ is currently causing issues to build arrow.
-    # Currently, this line should be specifying to disable using arrow.
     cd $srcdir/$pkgbase-$pkgver
-    ./configure --prefix=/usr \
-        --localstatedir=/var \
-        --sysconfdir=/etc \
-        --sbindir=/usr/bin \
-        --with-default-encoding=utf8 \
-        --with-zlib \
-        --with-lz4 \
-        --disable-arrow \
-        --enable-message-pack \
-        --enable-shared=yes \
-        --enable-static=yes \
-        --with-mecab \
-        --enable-mruby
+    cmake . -DCMAKE_INSTALL_PREFIX="/usr" \
+        -DGRN_WITH_MRUBY=ON \
+        -DGRN_WITH_APACHE_ARROW=ON
 
-    make -j$(nproc)
-}
-
-package_groonga-doc() {
-    pkgdesc="Document for Groonga"
-    arch=('any')
-
-    cd $srcdir/$pkgbase-$pkgver/doc
-
-    make DESTDIR="$pkgdir" install
+    cmake --build .
 }
 
 package_groonga() {
     pkgdesc="An opensource fulltext search engine."
-    depends=('glib2' 'libedit' 'zeromq' 'autoconf-archive' 'arrow' 'luajit'
+    depends=('glib2' 'libedit' 'zeromq' 'autoconf-archive' 'arrow' 'simdjson'
         'libevent' 'mecab-ipadic' 'msgpack-c' 'ruby' 'libstemmer')
     optdepends=('cutter-test_framework' 'mercurial' 'kytea')
 
     cd $srcdir/$pkgbase-$pkgver
-    make DESTDIR="$pkgdir" install
+    cmake --install . --prefix="$pkgdir/usr"
 
     # cleanup
     rm -rf "${pkgdir}/var/run"
-
-    # delete documents
-    rm -r "${pkgdir}/usr/share/doc"
 
     install -Dm644 ../groonga-httpd.service "$pkgdir"/usr/lib/systemd/system/groonga-httpd.service
 }
