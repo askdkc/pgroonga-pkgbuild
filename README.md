@@ -6,14 +6,16 @@ Arch LinuxにはAURとかがあり便利なのですが、個人ユーザのボ�
 ## PKGBUILDファイルについて
 PKGBUILDは次のように格納されています
 - groonga/version/PKGBUILD
+- groogga/version/groonga-httpd.service
 - pgroonga/version/PKGBUILD
 
 ## 使い方
-1. 必要なバージョンのPKGBUILDファイルをダウンロード
+1. 必要なバージョンのPKGBUILDファイルをダウンロード(Groongaは`groonga-httpd.service`も必要)
 ```bash
 mkdir -p temp/groonga
 cd temp/groonga
 wget PKGBUILD_URL(Groonga)
+wget groonga-httpd.service_URL(Groonga)
 
 cd ..
 mkdir pgroonga
