@@ -26,3 +26,24 @@ wget PKGBUILD_URL(PGroonga)
 ```bash
 makepkg -si
 ```
+
+### 初回：`mecab-ipadic`の依存関係について
+
+Groongaの`mecab`サポートのために`mecab`と`mecab-ipadic`が必要なのですが、`mecab-ipadic`が`mecab`のライブラリを探しに行く場所が`/usr/lib/mecab`ではなく`/usr/libexec/mecab`なので`mecab-ipadic`をAURから入れるには一手間必要です
+
+1. 最初に`mecab-git`をインストール
+```bash
+yay -S mecab-git
+```
+2. この後
+```bash
+sudo mkdir -p /usr/libexec/mecab
+cd /usr/libexec/mecab
+ln -s /usr/lib/mecab/（ここのファイル全部）
+```
+3. `mecab-ipadic`のインストール
+```bash
+yay -S mecab-ipadic
+```
+
+これでGroongaに必要なmecabの準備が出来ました🎉
